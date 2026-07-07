@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import logoAsset from "@/assets/growthloop-logo.jpeg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,6 +31,7 @@ function Index() {
       <main>
         <Hero />
         <FlowIntro />
+        <Flow3D />
         <FlowSection />
       </main>
       <Footer />
@@ -48,11 +50,12 @@ function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <a href="/" className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <MSIcon name="all_inclusive" className="text-[20px]" />
-          </span>
-          <span className="font-display text-lg font-bold tracking-tight">GrowthLoop</span>
+        <a href="/" className="flex items-center gap-2" aria-label="GrowthLoop home">
+          <img
+            src={logoAsset.url}
+            alt="GrowthLoop logo"
+            className="h-9 w-auto object-contain"
+          />
         </a>
         <ul className="hidden items-center gap-8 md:flex">
           {navLinks.map((l) => (
@@ -218,12 +221,11 @@ function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
-                <MSIcon name="all_inclusive" className="text-[20px]" />
-              </span>
-              <span className="font-display text-lg font-bold tracking-tight">GrowthLoop</span>
-            </div>
+            <img
+              src={logoAsset.url}
+              alt="GrowthLoop logo"
+              className="h-10 w-auto object-contain"
+            />
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
               Enterprise AI platform for modern lead generation and pipeline automation.
             </p>
