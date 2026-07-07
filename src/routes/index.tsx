@@ -282,3 +282,181 @@ function MSIcon({ name, className = "" }: { name: string; className?: string }) 
     </span>
   );
 }
+
+const flowNodes = [
+  {
+    icon: "hub",
+    label: "Capture",
+    sub: "WhatsApp · IG · Web",
+    depth: -60,
+  },
+  {
+    icon: "database",
+    label: "CRM Core",
+    sub: "Smart Memory",
+    depth: 40,
+  },
+  {
+    icon: "rocket_launch",
+    label: "Convert",
+    sub: "Auto Nurture",
+    depth: -60,
+  },
+] as const;
+
+function Flow3D() {
+  return (
+    <section
+      aria-label="3D pipeline flow"
+      className="relative overflow-hidden border-y border-border/60 bg-gradient-to-b from-background via-[oklch(0.97_0.04_300)] to-background"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 20% 30%, oklch(0.7 0.25 300 / 0.35), transparent 55%), radial-gradient(circle at 80% 70%, oklch(0.55 0.28 285 / 0.25), transparent 55%)",
+        }}
+      />
+      <div className="relative mx-auto max-w-6xl px-6 py-24">
+        <div
+          className="mx-auto"
+          style={{ perspective: "1400px", perspectiveOrigin: "50% 40%" }}
+        >
+          <div
+            className="relative mx-auto h-[420px] w-full max-w-4xl"
+            style={{
+              transform: "rotateX(22deg) rotateZ(-2deg)",
+              transformStyle: "preserve-3d",
+            }}
+          >
+            {/* Grid plane */}
+            <div
+              aria-hidden
+              className="absolute inset-x-0 bottom-0 h-[240px] rounded-[40px] border border-primary/20"
+              style={{
+                transform: "translateZ(-40px)",
+                backgroundImage:
+                  "linear-gradient(oklch(0.55 0.28 300 / 0.18) 1px, transparent 1px), linear-gradient(90deg, oklch(0.55 0.28 300 / 0.18) 1px, transparent 1px)",
+                backgroundSize: "48px 48px",
+                maskImage:
+                  "radial-gradient(ellipse at center, black 55%, transparent 85%)",
+              }}
+            />
+
+            {/* Connecting SVG (flat but in 3D space) */}
+            <svg
+              aria-hidden
+              viewBox="0 0 800 260"
+              className="absolute left-1/2 top-[110px] h-[260px] w-[92%] -translate-x-1/2"
+              style={{ transform: "translate(-50%, 0) translateZ(20px)" }}
+            >
+              <defs>
+                <linearGradient id="flowLine" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stopColor="oklch(0.55 0.28 300)" stopOpacity="0.15" />
+                  <stop offset="50%" stopColor="oklch(0.6 0.28 295)" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="oklch(0.55 0.28 300)" stopOpacity="0.15" />
+                </linearGradient>
+                <radialGradient id="packet" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0%" stopColor="oklch(0.98 0.05 300)" />
+                  <stop offset="60%" stopColor="oklch(0.7 0.28 300)" />
+                  <stop offset="100%" stopColor="oklch(0.55 0.28 300 / 0)" />
+                </radialGradient>
+              </defs>
+              <path
+                id="flowPath"
+                d="M 90 200 C 220 40, 380 40, 400 130 C 420 220, 580 220, 710 60"
+                fill="none"
+                stroke="url(#flowLine)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              {[0, 1.2, 2.4, 3.6].map((delay) => (
+                <circle key={delay} r="7" fill="url(#packet)">
+                  <animateMotion
+                    dur="4.8s"
+                    repeatCount="indefinite"
+                    begin={`${delay}s`}
+                    rotate="auto"
+                  >
+                    <mpath href="#flowPath" />
+                  </animateMotion>
+                </circle>
+              ))}
+            </svg>
+
+            {/* Floating 3D nodes */}
+            <div className="absolute inset-0 flex items-center justify-between px-4">
+              {flowNodes.map((n, i) => (
+                <FlowNode key={n.label} node={n} index={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="mx-auto mt-10 max-w-xl text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          Live pipeline · leads move in real time
+        </p>
+      </div>
+
+      <style>{`
+        @keyframes gl-float {
+          0%, 100% { transform: translateZ(var(--z, 0px)) translateY(0px); }
+          50%      { transform: translateZ(var(--z, 0px)) translateY(-14px); }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function FlowNode({
+  node,
+  index,
+}: {
+  node: (typeof flowNodes)[number];
+  index: number;
+}) {
+  return (
+    <div
+      className="relative"
+      style={{
+        transformStyle: "preserve-3d",
+        // @ts-expect-error CSS variable
+        "--z": `${node.depth}px`,
+        animation: `gl-float 5.5s ease-in-out ${index * 0.6}s infinite`,
+      }}
+    >
+      {/* Shadow on the grid plane */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-full h-6 w-28 -translate-x-1/2 translate-y-6 rounded-full bg-primary/30 blur-2xl"
+      />
+      {/* Card */}
+      <div
+        className="relative w-44 rounded-2xl border border-primary/30 bg-card/90 p-5 shadow-[0_20px_60px_-15px_oklch(0.55_0.28_300/0.5)] backdrop-blur"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-2xl"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.98 0.02 300 / 0.9), oklch(0.92 0.08 300 / 0.4))",
+            transform: "translateZ(-1px)",
+          }}
+        />
+        <div className="relative">
+          <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-primary to-[oklch(0.45_0.28_290)] text-primary-foreground shadow-lg shadow-primary/40">
+            <MSIcon name={node.icon} className="text-[22px]" />
+          </div>
+          <div className="mt-4 font-display text-base font-bold tracking-tight">
+            {node.label}
+          </div>
+          <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            {node.sub}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
