@@ -143,6 +143,10 @@ function FlowIntro() {
 }
 
 const features = [
+  
+] as unknown as never;
+
+const _placeholder = [
   {
     icon: "hub",
     title: "AI Capture & Qualification",
